@@ -862,3 +862,22 @@ select {
   --radius-xl: 16px;
   --radius: 8px;
 }
+
+:root[data-theme="minecraft"] button,
+:root[data-theme="minecraft"] a,
+:root[data-theme="minecraft"] [role="button"],
+:root[data-theme="minecraft"] .btn,
+:root[data-theme="minecraft"] .nav-item,
+:root[data-theme="minecraft"] .settings-theme-card,
+:root[data-theme="minecraft"] .qs-segmented__btn,
+:root[data-theme="minecraft"] .agent-chat__suggestion,
+:root[data-theme="minecraft-light"] button,
+:root[data-theme="minecraft-light"] a,
+:root[data-theme="minecraft-light"] [role="button"],
+:root[data-theme="minecraft-light"] .btn,
+:root[data-theme="minecraft-light"] .nav-item,
+:root[data-theme="minecraft-light"] .settings-theme-card,
+:root[data-theme="minecraft-light"] .qs-segmented__btn,
+:root[data-theme="minecraft-light"] .agent-chat__suggestion {
+  cursor: url("/pickaxe-cursor.svg") 4 4, pointer;
+}

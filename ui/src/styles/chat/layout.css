@@ -495,8 +495,10 @@
 
 :root[data-theme="minecraft"] .agent-chat__input,
 :root[data-theme="minecraft-light"] .agent-chat__input {
+  position: relative;
   border-radius: 6px;
   border-width: 2px;
+  background: linear-gradient(180deg, #76c84f 0 8px, #3b2d22 8px 100%);
   box-shadow:
     inset 0 1px 0 var(--card-highlight),
     0 3px 0 rgba(0, 0, 0, 0.16);
@@ -1072,6 +1074,21 @@
 
 .agent-chat__welcome-glow {
   display: none;
+}
+
+:root[data-theme="minecraft"] .agent-chat__welcome-glow,
+:root[data-theme="minecraft-light"] .agent-chat__welcome-glow {
+  display: block;
+  position: absolute;
+  top: 22px;
+  right: calc(50% - 120px);
+  width: 18px;
+  height: 28px;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 50% 18%, #ffd779 0 22%, #ff9f43 22% 45%, rgba(255, 159, 67, 0.25) 45% 62%, transparent 62%),
+    linear-gradient(180deg, #6b4428 0 100%);
+  box-shadow: 0 0 14px rgba(255, 176, 66, 0.28);
 }
 
 .agent-chat__welcome h2 {

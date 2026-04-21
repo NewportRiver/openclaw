@@ -337,7 +337,7 @@ img.chat-avatar {
 
 :root[data-theme="minecraft"] .chat-group.assistant .chat-bubble,
 :root[data-theme="minecraft-light"] .chat-group.assistant .chat-bubble {
-  background: color-mix(in srgb, var(--card) 88%, var(--secondary));
+  background: linear-gradient(180deg, #76c84f 0 6px, #3d3025 6px 100%);
 }
 
 :root[data-theme="minecraft"] .chat-group.user .chat-bubble,
