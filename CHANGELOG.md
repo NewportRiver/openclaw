@@ -7,6 +7,7 @@ Docs: https://docs.openclaw.ai
 ### Changes
 
 - Control UI/theme: add a first-class `minecraft` theme family to the Control UI, including runtime theme resolution, boot-time theme allowlisting, Minecraft-specific token palettes, blocky chat/control styling, concept-driven wood/grass/stone placard treatments, and a playful OpenCraft visual reskin with a Steve-style logo asset for the themed experience.
+- Docs/local mods: add a local docs index, bug ledger, architecture notes, and a step-by-step developer workflow for the OpenCraft Control UI theme so future theme work has explicit source, deployment, and troubleshooting guidance.
 - Plugins/tests: reuse plugin loader alias and Jiti config resolution across repeated same-context loads, reducing import-heavy test overhead. (#69316) Thanks @amknight.
 - Cron: split runtime execution state into `jobs-state.json` so `jobs.json` stays stable for git-tracked job definitions. (#63105) Thanks @Feelw00.
 - Agents/compaction: send opt-in start and completion notices during context compaction. (#67830) Thanks @feniix.
