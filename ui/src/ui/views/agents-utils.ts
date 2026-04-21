@@ -222,7 +222,7 @@ export function resolveAgentAvatarUrl(
 
 export function agentLogoUrl(basePath: string): string {
   const base = normalizeOptionalString(basePath)?.replace(/\/$/, "") ?? "";
-  return base ? `${base}/favicon.svg` : "favicon.svg";
+  return base ? `${base}/opencraft-steve.svg` : "opencraft-steve.svg";
 }
 
 function isLikelyEmoji(value: string) {

@@ -1,4 +1,4 @@
-export type ThemeName = "claw" | "knot" | "dash";
+export type ThemeName = "claw" | "knot" | "dash" | "minecraft";
 export type ThemeMode = "system" | "light" | "dark";
 export type ResolvedTheme =
   | "dark"
@@ -6,9 +6,11 @@ export type ResolvedTheme =
   | "openknot"
   | "openknot-light"
   | "dash"
-  | "dash-light";
+  | "dash-light"
+  | "minecraft"
+  | "minecraft-light";
 
-export const VALID_THEME_NAMES = new Set<ThemeName>(["claw", "knot", "dash"]);
+export const VALID_THEME_NAMES = new Set<ThemeName>(["claw", "knot", "dash", "minecraft"]);
 export const VALID_THEME_MODES = new Set<ThemeMode>(["system", "light", "dark"]);
 
 type ThemeSelection = { theme: ThemeName; mode: ThemeMode };
@@ -24,6 +26,8 @@ const LEGACY_MAP: Record<string, ThemeSelection> = {
   openknot: { theme: "knot", mode: "dark" },
   fieldmanual: { theme: "dash", mode: "dark" },
   clawdash: { theme: "dash", mode: "light" },
+  minecraft: { theme: "minecraft", mode: "dark" },
+  "minecraft-light": { theme: "minecraft", mode: "light" },
   system: { theme: "claw", mode: "system" },
 };
 
@@ -70,5 +74,8 @@ export function resolveTheme(theme: ThemeName, mode: ThemeMode): ResolvedTheme {
   if (theme === "knot") {
     return resolvedMode === "light" ? "openknot-light" : "openknot";
   }
-  return resolvedMode === "light" ? "dash-light" : "dash";
+  if (theme === "dash") {
+    return resolvedMode === "light" ? "dash-light" : "dash";
+  }
+  return resolvedMode === "light" ? "minecraft-light" : "minecraft";
 }

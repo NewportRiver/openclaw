@@ -781,6 +781,71 @@
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
 }
 
+:root[data-theme="minecraft"] .shell,
+:root[data-theme="minecraft-light"] .shell {
+  background:
+    radial-gradient(circle at top left, rgba(255, 184, 92, 0.12), transparent 14%),
+    linear-gradient(180deg, rgba(118, 200, 79, 0.14) 0 10px, transparent 10px 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.16)),
+    linear-gradient(135deg, #3b3026 0%, #2c241d 32%, #251e19 62%, #3a3027 100%);
+}
+
+:root[data-theme="minecraft"] .topbar,
+:root[data-theme="minecraft-light"] .topbar {
+  border-bottom: 2px solid var(--border-strong);
+  background: linear-gradient(180deg, #6ea845 0 6px, #503a2b 6px 100%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+
+:root[data-theme="minecraft"] .topbar-search,
+:root[data-theme="minecraft-light"] .topbar-search,
+:root[data-theme="minecraft"] .topbar-theme-mode,
+:root[data-theme="minecraft-light"] .topbar-theme-mode,
+:root[data-theme="minecraft"] .topbar-status .pill,
+:root[data-theme="minecraft-light"] .topbar-status .pill {
+  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  background: linear-gradient(180deg, #4d3a2d 0%, #32261e 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 0 rgba(0, 0, 0, 0.16);
+}
+
+:root[data-theme="minecraft"] .sidebar,
+:root[data-theme="minecraft-light"] .sidebar,
+:root[data-theme="minecraft"] .sidebar-shell,
+:root[data-theme="minecraft-light"] .sidebar-shell {
+  background: linear-gradient(180deg, #6ea845 0 8px, #4f3a2b 8px 100%);
+}
+
+:root[data-theme="minecraft"] .sidebar-shell,
+:root[data-theme="minecraft-light"] .sidebar-shell {
+  border-right: 2px solid var(--border-strong);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="minecraft"] .nav-item,
+:root[data-theme="minecraft-light"] .nav-item,
+:root[data-theme="minecraft"] .nav-section__label,
+:root[data-theme="minecraft-light"] .nav-section__label,
+:root[data-theme="minecraft"] .nav-collapse-toggle,
+:root[data-theme="minecraft-light"] .nav-collapse-toggle,
+:root[data-theme="minecraft"] .sidebar-version,
+:root[data-theme="minecraft-light"] .sidebar-version {
+  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  background: linear-gradient(180deg, #4d392c 0%, #34271f 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 0 rgba(0, 0, 0, 0.16);
+}
+
+:root[data-theme="minecraft"] .nav-item.active,
+:root[data-theme="minecraft-light"] .nav-item.active,
+:root[data-theme="minecraft"] .nav-item--active,
+:root[data-theme="minecraft-light"] .nav-item--active {
+  background: linear-gradient(180deg, #75bd49 0 6px, #4a382b 6px 100%);
+  border-color: #6ea845;
+}
+
 .sidebar--collapsed .sidebar-shell__footer {
   padding: 8px 0 2px;
 }
