@@ -60,9 +60,21 @@ Before changing anything, check these files.
 
 ## Branding and assets
 - `ui/public/opencraft-steve.svg`
+- `ui/public/minecraft-steve-head.jpg`
 - `ui/public/pickaxe-cursor.svg`
+- `ui/public/mc-cobblestone.jpg`
+- `ui/public/mc-dirt.jpg`
+- `ui/public/mc-dirt-grass.jpg`
+- `ui/public/mc-grass.jpg`
+- `ui/public/sounds/*.mp3`
 - `ui/src/ui/views/login-gate.ts`
 - `ui/src/ui/components/dashboard-header.ts`
+- `ui/src/ui/components/minecraft-world-backdrop.ts`
+- `ui/src/ui/soundboard.ts`
+
+## External asset drop
+When Bart drops new concept art or sound assets, inspect the source pack here first:
+- `D:\openclaw\source\assets`
 
 ---
 
@@ -127,6 +139,12 @@ Use this map:
 - advanced settings: `ui/src/styles/config.css`
 - quick settings: `ui/src/styles/config-quick.css`
 - chat shell and composer: `ui/src/styles/chat/layout.css`
+
+If the pass includes an animated or interactive backdrop behind chat, also inspect:
+- `ui/src/ui/components/minecraft-world-backdrop.ts`
+- `ui/src/ui/views/chat.ts`
+- `ui/src/ui/app-render.ts`
+- `ui/src/styles/chat/sidebar.css`
 - chat bubbles and avatars: `ui/src/styles/chat/grouped.css`
 
 Preferred pattern:
@@ -135,16 +153,40 @@ Preferred pattern:
 - keep Minecraft-specific rules clearly isolated
 
 ## Step 6. Add or update themed assets
-Edit or add:
-- `ui/public/*.svg`
+Inspect source assets first:
+- `D:\openclaw\source\assets`
+
+Then edit or add served assets under:
+- `ui/public/*`
 
 Examples already used:
 - `opencraft-steve.svg`
+- `minecraft-steve-head.jpg`
 - `pickaxe-cursor.svg`
+- `mc-cobblestone.jpg`
+- `mc-dirt.jpg`
+- `mc-dirt-grass.jpg`
+- `mc-grass.jpg`
+- `sounds/*.mp3`
 
 Then wire them into the correct UI surfaces.
 
-## Step 7. Build the UI
+## Step 7. Add or adjust the soundboard when using theme audio
+Edit:
+- `ui/src/ui/soundboard.ts`
+- `ui/src/ui/app.ts`
+
+What to do:
+- keep sound behavior gated to the intended theme family
+- use low volume and throttle guards
+- map sounds by interaction personality, not randomly
+- avoid turning every hover or render into noise
+- prefer click, toggle, send, success, and danger categories over novelty spam
+
+## Step 8. Build the UI
+Run:
+
+## Step 9. Build the UI
 Run:
 
 ```powershell
@@ -155,7 +197,7 @@ Expected output:
 - built files land in `D:\openclaw\forks\openclaw-ui-theme-work\dist\control-ui`
 - hashed JS and CSS asset names will usually change
 
-## Step 8. Back up the live runtime before deployment
+## Step 10. Back up the live runtime before deployment
 Recommended pattern:
 
 ```powershell
@@ -166,7 +208,7 @@ $backup="C:\Users\bart\AppData\Roaming\npm\node_modules\openclaw\dist\control-ui
 Copy-Item $dst $backup -Recurse -Force
 ```
 
-## Step 9. Deploy the built UI into the live install
+## Step 11. Deploy the built UI into the live install
 After backing up:
 
 ```powershell
@@ -175,7 +217,7 @@ Copy-Item (Join-Path $src '*') $dst -Recurse -Force
 
 This replaces the served Control UI bundle with the new build.
 
-## Step 10. Hard refresh and verify
+## Step 12. Hard refresh and verify
 In the browser:
 - open the Control UI
 - hard refresh with `Ctrl+Shift+R`
@@ -184,7 +226,8 @@ Verify all of the following:
 - `Minecraft` appears in the theme selector
 - switching to it updates the full UI, not only some controls
 - the page still boots into the selected theme after refresh
-- assets such as the logo or cursor show correctly
+- assets such as the Steve logo, cursor, and textures show correctly
+- contextual sound effects trigger on the intended actions without becoming overwhelming
 - no obvious unreadable text or broken contrast appears
 
 ---

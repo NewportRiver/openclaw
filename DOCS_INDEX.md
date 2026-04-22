@@ -13,7 +13,9 @@
 ## Local Mod Docs
 - `docs/reference/control-ui-opencraft-theme.md` - architecture and implementation map for the OpenCraft theme work
 - `docs/reference/control-ui-theme-dev-workflow.md` - step by step developer workflow for editing, building, deploying, and verifying the theme
+- `docs/reference/control-ui-opencraft-asset-inventory.md` - asset pack inventory plus sound/texture usage decisions for the Minecraft redesign pass
 - `BUGLOG.md` - local mod bug memory, including the boot-time theme whitelist blocker
+- `FEATURES.md` - future theme and UI backlog so design ideas stay out of `CHANGELOG.md`
 
 ## Change Ledger
 - `CHANGELOG.md` - upstream changelog plus the local OpenCraft theme entry under `Unreleased`

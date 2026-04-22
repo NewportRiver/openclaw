@@ -36,12 +36,19 @@ import { buildSidebarContent } from "../chat/tool-cards.ts";
 import { getExpandedToolCards, syncToolCardExpansionState } from "../chat/tool-expansion-state.ts";
 import type { EmbedSandboxMode } from "../embed-sandbox.ts";
 import { icons } from "../icons.ts";
+import {
+  cycleStoredUserHeadChoice,
+  getCurrentUserHead,
+  getMainAssistantHead,
+  isMinecraftThemeActive,
+} from "../minecraft-avatars.ts";
 import type { SidebarContent } from "../sidebar-content.ts";
 import { detectTextDirection } from "../text-direction.ts";
 import type { SessionsListResult } from "../types.ts";
 import type { ChatAttachment, ChatQueueItem } from "../ui-types.ts";
 import { agentLogoUrl, resolveAgentAvatarUrl } from "./agents-utils.ts";
 import { renderMarkdownSidebar } from "./markdown-sidebar.ts";
+import "../components/minecraft-world-backdrop.ts";
 import "../components/resizable-divider.ts";
 
 export type ChatProps = {
@@ -71,6 +78,7 @@ export type ChatProps = {
   sessions: SessionsListResult | null;
   focusMode: boolean;
   sidebarOpen?: boolean;
+  showMinecraftBackdrop?: boolean;
   sidebarContent?: SidebarContent | null;
   sidebarError?: string | null;
   splitRatio?: number;
@@ -736,6 +744,9 @@ export function renderChat(props: ChatProps) {
   const isBusy = props.sending || props.stream !== null;
   const canAbort = Boolean(props.canAbort && props.onAbort);
   const activeSession = props.sessions?.sessions?.find((row) => row.key === props.sessionKey);
+  const minecraftThemeActive = isMinecraftThemeActive();
+  const userHead = getCurrentUserHead();
+  const assistantHead = getMainAssistantHead();
   const reasoningLevel = activeSession?.reasoningLevel ?? "off";
   const showReasoning = props.showThinking && reasoningLevel !== "off";
   const assistantIdentity = {
@@ -1067,10 +1078,13 @@ export function renderChat(props: ChatProps) {
 
       <div class="chat-split-container ${sidebarOpen ? "chat-split-container--open" : ""}">
         <div
-          class="chat-main"
+          class="chat-main ${props.showMinecraftBackdrop ? "chat-main--minecraft-world" : ""}"
           style="flex: ${sidebarOpen ? `0 0 ${splitRatio * 100}%` : "1 1 100%"}"
         >
-          ${thread}
+          ${props.showMinecraftBackdrop
+            ? html`<minecraft-world-backdrop active></minecraft-world-backdrop>`
+            : nothing}
+          <div class="chat-main__ui">${thread}</div>
         </div>
 
         ${sidebarOpen
@@ -1149,116 +1163,147 @@ export function renderChat(props: ChatProps) {
         : nothing}
 
       <!-- Input bar -->
-      <div class="agent-chat__input">
-        ${renderSlashMenu(requestUpdate, props)} ${renderAttachmentPreview(props)}
+      <div class="agent-chat__input ${minecraftThemeActive ? "agent-chat__input--minecraft-identities" : ""}">
+        <div class="agent-chat__input-shell">
+          ${minecraftThemeActive
+            ? html`
+                <div class="agent-chat__identity agent-chat__identity--assistant" title=${props.assistantName}>
+                  <img src=${assistantHead.src} alt=${assistantHead.label} />
+                  <span class="agent-chat__identity-label">${props.assistantName}</span>
+                </div>
+              `
+            : nothing}
 
-        <input
-          type="file"
-          accept=${CHAT_ATTACHMENT_ACCEPT}
-          multiple
-          class="agent-chat__file-input"
-          @change=${(e: Event) => handleFileSelect(e, props)}
-        />
+          <div class="agent-chat__input-main">
+            ${renderSlashMenu(requestUpdate, props)} ${renderAttachmentPreview(props)}
 
-        ${vs.sttRecording && vs.sttInterimText
-          ? html`<div class="agent-chat__stt-interim">${vs.sttInterimText}</div>`
-          : nothing}
+            <input
+              type="file"
+              accept=${CHAT_ATTACHMENT_ACCEPT}
+              multiple
+              class="agent-chat__file-input"
+              @change=${(e: Event) => handleFileSelect(e, props)}
+            />
 
-        <textarea
-          ${ref((el) => el && adjustTextareaHeight(el as HTMLTextAreaElement))}
-          .value=${props.draft}
-          dir=${detectTextDirection(props.draft)}
-          ?disabled=${!props.connected}
-          @keydown=${handleKeyDown}
-          @input=${handleInput}
-          @paste=${(e: ClipboardEvent) => handlePaste(e, props)}
-          placeholder=${vs.sttRecording ? "Listening..." : placeholder}
-          rows="1"
-        ></textarea>
-
-        <div class="agent-chat__toolbar">
-          <div class="agent-chat__toolbar-left">
-            <button
-              class="agent-chat__input-btn"
-              @click=${() => {
-                document.querySelector<HTMLInputElement>(".agent-chat__file-input")?.click();
-              }}
-              title="Attach file"
-              aria-label="Attach file"
-              ?disabled=${!props.connected}
-            >
-              ${icons.paperclip}
-            </button>
-
-            ${isSttSupported()
-              ? html`
-                  <button
-                    class="agent-chat__input-btn ${vs.sttRecording
-                      ? "agent-chat__input-btn--recording"
-                      : ""}"
-                    @click=${() => {
-                      if (vs.sttRecording) {
-                        stopStt();
-                        vs.sttRecording = false;
-                        vs.sttInterimText = "";
-                        requestUpdate();
-                      } else {
-                        const started = startStt({
-                          onTranscript: (text, isFinal) => {
-                            if (isFinal) {
-                              const current = getDraft();
-                              const sep = current && !current.endsWith(" ") ? " " : "";
-                              props.onDraftChange(current + sep + text);
-                              vs.sttInterimText = "";
-                            } else {
-                              vs.sttInterimText = text;
-                            }
-                            requestUpdate();
-                          },
-                          onStart: () => {
-                            vs.sttRecording = true;
-                            requestUpdate();
-                          },
-                          onEnd: () => {
-                            vs.sttRecording = false;
-                            vs.sttInterimText = "";
-                            requestUpdate();
-                          },
-                          onError: () => {
-                            vs.sttRecording = false;
-                            vs.sttInterimText = "";
-                            requestUpdate();
-                          },
-                        });
-                        if (started) {
-                          vs.sttRecording = true;
-                          requestUpdate();
-                        }
-                      }
-                    }}
-                    title=${vs.sttRecording ? "Stop recording" : "Voice input"}
-                    ?disabled=${!props.connected}
-                  >
-                    ${vs.sttRecording ? icons.micOff : icons.mic}
-                  </button>
-                `
+            ${vs.sttRecording && vs.sttInterimText
+              ? html`<div class="agent-chat__stt-interim">${vs.sttInterimText}</div>`
               : nothing}
-            ${tokens ? html`<span class="agent-chat__token-count">${tokens}</span>` : nothing}
+
+            <textarea
+              ${ref((el) => el && adjustTextareaHeight(el as HTMLTextAreaElement))}
+              .value=${props.draft}
+              dir=${detectTextDirection(props.draft)}
+              ?disabled=${!props.connected}
+              @keydown=${handleKeyDown}
+              @input=${handleInput}
+              @paste=${(e: ClipboardEvent) => handlePaste(e, props)}
+              placeholder=${vs.sttRecording ? "Listening..." : placeholder}
+              rows="1"
+            ></textarea>
+
+            <div class="agent-chat__toolbar">
+              <div class="agent-chat__toolbar-left">
+                <button
+                  class="agent-chat__input-btn"
+                  @click=${() => {
+                    document.querySelector<HTMLInputElement>(".agent-chat__file-input")?.click();
+                  }}
+                  title="Attach file"
+                  aria-label="Attach file"
+                  ?disabled=${!props.connected}
+                >
+                  ${icons.paperclip}
+                </button>
+
+                ${isSttSupported()
+                  ? html`
+                      <button
+                        class="agent-chat__input-btn ${vs.sttRecording
+                          ? "agent-chat__input-btn--recording"
+                          : ""}"
+                        @click=${() => {
+                          if (vs.sttRecording) {
+                            stopStt();
+                            vs.sttRecording = false;
+                            vs.sttInterimText = "";
+                            requestUpdate();
+                          } else {
+                            const started = startStt({
+                              onTranscript: (text, isFinal) => {
+                                if (isFinal) {
+                                  const current = getDraft();
+                                  const sep = current && !current.endsWith(" ") ? " " : "";
+                                  props.onDraftChange(current + sep + text);
+                                  vs.sttInterimText = "";
+                                } else {
+                                  vs.sttInterimText = text;
+                                }
+                                requestUpdate();
+                              },
+                              onStart: () => {
+                                vs.sttRecording = true;
+                                requestUpdate();
+                              },
+                              onEnd: () => {
+                                vs.sttRecording = false;
+                                vs.sttInterimText = "";
+                                requestUpdate();
+                              },
+                              onError: () => {
+                                vs.sttRecording = false;
+                                vs.sttInterimText = "";
+                                requestUpdate();
+                              },
+                            });
+                            if (started) {
+                              vs.sttRecording = true;
+                              requestUpdate();
+                            }
+                          }
+                        }}
+                        title=${vs.sttRecording ? "Stop recording" : "Voice input"}
+                        ?disabled=${!props.connected}
+                      >
+                        ${vs.sttRecording ? icons.micOff : icons.mic}
+                      </button>
+                    `
+                  : nothing}
+                ${tokens ? html`<span class="agent-chat__token-count">${tokens}</span>` : nothing}
+              </div>
+
+              ${renderChatRunControls({
+                canAbort,
+                connected: props.connected,
+                draft: props.draft,
+                hasMessages: props.messages.length > 0,
+                isBusy,
+                sending: props.sending,
+                onAbort: props.onAbort,
+                onExport: () => exportMarkdown(props),
+                onNewSession: props.onNewSession,
+                onSend: props.onSend,
+                onStoreDraft: (draft) => inputHistory.push(draft),
+              })}
+            </div>
           </div>
 
-          ${renderChatRunControls({
-            canAbort,
-            connected: props.connected,
-            draft: props.draft,
-            hasMessages: props.messages.length > 0,
-            isBusy,
-            sending: props.sending,
-            onAbort: props.onAbort,
-            onExport: () => exportMarkdown(props),
-            onNewSession: props.onNewSession,
-            onSend: props.onSend,
-            onStoreDraft: (draft) => inputHistory.push(draft),
-          })}
+          ${minecraftThemeActive
+            ? html`
+                <button
+                  class="agent-chat__identity agent-chat__identity--user"
+                  type="button"
+                  @click=${() => {
+                    cycleStoredUserHeadChoice();
+                    requestUpdate();
+                  }}
+                  title=${`Switch your head icon, current: ${userHead.label}`}
+                  aria-label="Switch your Minecraft head icon"
+                >
+                  <img src=${userHead.src} alt=${userHead.label} />
+                  <span class="agent-chat__identity-label">${userHead.label}</span>
+                </button>
+              `
+            : nothing}
         </div>
       </div>
     </section>

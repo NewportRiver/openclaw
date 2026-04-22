@@ -22,7 +22,8 @@ The goal was not a one-off CSS prank. The goal was to add a first-class `minecra
 - resolve correctly on boot before app hydration
 - ship both dark and light variants
 - restyle major UI surfaces with a Minecraft-adjacent visual language
-- support branded assets like the Steve-style logo and pickaxe cursor
+- support branded assets like the Steve head logo, pickaxe cursor, and texture-backed surfaces
+- add restrained contextual Minecraft UI sounds that match the action being taken
 
 ## Source vs live runtime split
 There are two different places involved in this workflow.
@@ -49,6 +50,8 @@ Important commits so far:
 - `7f34d80327 feat(control-ui): add OpenCraft minecraft theme pass`
 - `27ae4fcb01 feat(control-ui): polish OpenCraft theme details`
 - `600560d373 feat(control-ui): sharpen pickaxe cursor`
+
+This document also covers the later asset-backed redesign pass that introduced supplied Minecraft textures, Steve head branding, a contextual soundboard, the real pickaxe cursor asset, and a lightweight interactive voxel-world chat backdrop.
 
 ## Theme architecture summary
 The theme works because multiple layers were changed together.
@@ -152,7 +155,13 @@ If this step is missed, the theme can exist in code but stay inaccessible to use
 
 ## Asset files
 - `ui/public/opencraft-steve.svg`
+- `ui/public/minecraft-steve-head.jpg`
 - `ui/public/pickaxe-cursor.svg`
+- `ui/public/mc-cobblestone.jpg`
+- `ui/public/mc-dirt.jpg`
+- `ui/public/mc-dirt-grass.jpg`
+- `ui/public/mc-grass.jpg`
+- `ui/public/sounds/*.mp3`
 
 ## Supporting view files
 - `ui/src/ui/views/agents-utils.ts`
@@ -160,12 +169,16 @@ If this step is missed, the theme can exist in code but stay inaccessible to use
 - `ui/src/ui/components/dashboard-header.ts`
 - `ui/src/ui/views/chat.ts`
 - `ui/src/ui/app-render.ts`
+- `ui/src/ui/app.ts`
+- `ui/src/ui/soundboard.ts`
 
 ### What changed
 The theme is not only a palette. It also changes the visual identity:
-- Steve-style block logo asset for themed surfaces
+- supplied Steve head art now drives the upper-left brand icon and login logo
 - OpenClaw branding rendered as `OpenCraft` in themed presentation points
-- custom pickaxe cursor for clickable controls in the Minecraft theme
+- custom pickaxe cursor remains the interaction pointer
+- real dirt, grass, and cobblestone textures now back key Minecraft surfaces
+- contextual Minecraft sound effects now reinforce send, toggle, theme, success, and danger interactions
 
 ### Why it matters
 This is what pushes the implementation from generic green theme into an actual concept-driven theme mode.
@@ -215,6 +228,8 @@ Used for shell-level structure such as:
 - sidebar branding
 - shell chrome
 - header and nav treatment
+- Steve logo presentation
+- texture-backed topbar and shell framing
 
 This is where the broader application frame gets the blocky OpenCraft look.
 
@@ -222,6 +237,7 @@ This is where the broader application frame gets the blocky OpenCraft look.
 Used for shared surfaces such as:
 - login gate visuals
 - reusable cards and common components
+- login background and texture-backed Steve entrance card
 
 This gives global controls and entry surfaces the same style language.
 
@@ -238,6 +254,7 @@ Used for:
 - welcome state
 - control bars
 - chat input shell
+- textured thread and composer framing
 
 ### `chat/grouped.css`
 Used for:
@@ -246,6 +263,7 @@ Used for:
 - avatars
 - divider labels
 - assistant vs user bubble treatment
+- dirt and grass texture treatments for chat bubbles
 
 ### Why these file splits matter
 The Control UI is not themed from one monolithic stylesheet. It is segmented by surface area. Future edits should preserve that separation.
@@ -265,14 +283,22 @@ The Control UI is not themed from one monolithic stylesheet. It is segmented by 
 
 ## Branding and themed render behavior
 - `ui/src/ui/app-render.ts`
+- `ui/src/ui/app.ts`
 - `ui/src/ui/components/dashboard-header.ts`
 - `ui/src/ui/views/agents-utils.ts`
 - `ui/src/ui/views/chat.ts`
 - `ui/src/ui/views/login-gate.ts`
+- `ui/src/ui/soundboard.ts`
 
 ## Assets
 - `ui/public/opencraft-steve.svg`
+- `ui/public/minecraft-steve-head.jpg`
 - `ui/public/pickaxe-cursor.svg`
+- `ui/public/mc-cobblestone.jpg`
+- `ui/public/mc-dirt.jpg`
+- `ui/public/mc-dirt-grass.jpg`
+- `ui/public/mc-grass.jpg`
+- `ui/public/sounds/*.mp3`
 
 ## Styling
 - `ui/src/styles/base.css`
@@ -323,6 +349,46 @@ Reason:
 - easier diff review
 - easier maintenance
 - more obvious ownership of each visual treatment
+
+## Additional themed runtime layer: interactive voxel backdrop
+
+Later OpenCraft work added a lightweight animated block-world backdrop behind the chat UI.
+
+### Files
+- `ui/src/ui/components/minecraft-world-backdrop.ts`
+- `ui/src/ui/views/chat.ts`
+- `ui/src/ui/app-render.ts`
+- `ui/src/styles/chat/sidebar.css`
+- `ui/src/styles/chat/layout.css`
+
+### What changed
+- Added a dedicated custom element that renders a faux-3D Minecraft-style world to a canvas.
+- Kept the effect theme-gated so it only appears for `minecraft` and `minecraft-light`.
+- Mounted the backdrop behind the chat shell, not as a global page replacement.
+- Made camera motion respond to mouse position so the world feels alive without turning the Control UI into a full game.
+- Kept the chat thread and composer readable by layering semi-transparent foreground chrome over the backdrop.
+- Later extended the same backdrop component with an opt-in embedded `https://classic.minecraft.net/` play layer, so the chat background can temporarily become a playable Minecraft Classic scene.
+
+### Why it was done this way
+The user wanted the feeling of a real Minecraft world behind the chat interface, but a full embedded game would have been too heavy, noisy, and fragile for a daily-driver dashboard.
+
+This compromise keeps the fun part:
+- depth
+- motion
+- Minecraft world energy
+
+while preserving:
+- readability
+- performance
+- maintainability
+- rebuild-safe deployment
+
+For the Classic prototype, the same principle still applies: gameplay is opt-in rather than always-on.
+
+That means:
+- the chat backdrop stays ambient by default
+- the user explicitly taps into the world to play
+- the user can return to chat without the game permanently stealing keyboard intent
 
 ---
 

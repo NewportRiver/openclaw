@@ -68,6 +68,25 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
+:root[data-theme="minecraft"] .qs-card,
+:root[data-theme="minecraft-light"] .qs-card {
+  border-width: 2px;
+  border-radius: 4px;
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 4px 0 var(--mc-drop);
+}
+
+:root[data-theme="minecraft"] .qs-card:hover,
+:root[data-theme="minecraft-light"] .qs-card:hover {
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 5px 0 var(--mc-drop),
+    0 12px 22px rgba(0, 0, 0, 0.18);
+}
+
 .qs-card--span-all {
   grid-column: 1 / -1;
 }
@@ -78,6 +97,12 @@
   justify-content: space-between;
   padding: 12px 16px;
   background: color-mix(in srgb, var(--bg-elevated) 60%, var(--card) 40%);
+}
+
+:root[data-theme="minecraft"] .qs-card__header,
+:root[data-theme="minecraft-light"] .qs-card__header {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 92%, white 8%) 0 55%, color-mix(in srgb, var(--panel) 92%, var(--card)) 55% 100%);
+  border-bottom: 2px solid color-mix(in srgb, var(--border-strong) 76%, transparent);
 }
 
 .qs-card__header-left {
@@ -191,6 +216,17 @@
   border-color: var(--border-strong);
 }
 
+:root[data-theme="minecraft"] .qs-row__value--action,
+:root[data-theme="minecraft-light"] .qs-row__value--action {
+  border-width: 2px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 92%, white 8%) 0 45%, var(--panel) 45% 100%);
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 2px 0 var(--mc-drop);
+}
+
 .qs-row__value--action code {
   font-family: var(--mono);
   font-size: 0.75rem;
@@ -212,6 +248,17 @@
   border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
   border-radius: var(--radius-md);
   padding: 2px;
+}
+
+:root[data-theme="minecraft"] .qs-segmented,
+:root[data-theme="minecraft-light"] .qs-segmented {
+  border-width: 2px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 88%, white 12%) 0 45%, color-mix(in srgb, var(--bg) 92%, var(--panel)) 45% 100%);
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 2px 0 var(--mc-drop);
 }
 
 .qs-segmented__btn {
@@ -242,6 +289,20 @@
   box-shadow: var(--shadow-sm);
 }
 
+:root[data-theme="minecraft"] .qs-segmented__btn,
+:root[data-theme="minecraft-light"] .qs-segmented__btn {
+  border-radius: 3px;
+}
+
+:root[data-theme="minecraft"] .qs-segmented__btn--active,
+:root[data-theme="minecraft-light"] .qs-segmented__btn--active {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 94%, white 6%) 0 45%, var(--panel) 45% 100%);
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -1px 0 var(--mc-edge-lo),
+    0 2px 0 rgba(0, 0, 0, 0.14);
+}
+
 /* ── Toggle switch ── */
 
 .qs-toggle {
@@ -268,6 +329,16 @@
   flex-shrink: 0;
 }
 
+:root[data-theme="minecraft"] .qs-toggle__track,
+:root[data-theme="minecraft-light"] .qs-toggle__track {
+  border-width: 2px;
+  border-radius: 4px;
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 2px 0 var(--mc-drop);
+}
+
 .qs-toggle__track::after {
   content: "";
   position: absolute;
@@ -280,6 +351,12 @@
   transition:
     transform var(--duration-normal) var(--ease-spring),
     background var(--duration-normal) var(--ease-out);
+}
+
+:root[data-theme="minecraft"] .qs-toggle__track::after,
+:root[data-theme="minecraft-light"] .qs-toggle__track::after {
+  border-radius: 2px;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.22), inset -1px -1px 0 rgba(0, 0, 0, 0.18);
 }
 
 .qs-toggle input:checked + .qs-toggle__track {

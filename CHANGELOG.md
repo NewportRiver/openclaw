@@ -7,7 +7,13 @@ Docs: https://docs.openclaw.ai
 ### Changes
 
 - Control UI/theme: add a first-class `minecraft` theme family to the Control UI, including runtime theme resolution, boot-time theme allowlisting, Minecraft-specific token palettes, blocky chat/control styling, concept-driven wood/grass/stone placard treatments, and a playful OpenCraft visual reskin with a Steve-style logo asset for the themed experience.
-- Docs/local mods: add a local docs index, bug ledger, architecture notes, and a step-by-step developer workflow for the OpenCraft Control UI theme so future theme work has explicit source, deployment, and troubleshooting guidance.
+- Docs/local mods: add a local docs index, bug ledger, architecture notes, a step-by-step developer workflow, and an asset inventory for the OpenCraft Control UI theme so future theme work has explicit source, deployment, troubleshooting, and asset-usage guidance.
+- Control UI/theme: redesign the Minecraft OpenCraft pass with supplied Steve head branding, selective dirt/grass texture-backed surfaces, and a contextual Minecraft soundboard for send, toggle, theme, success, danger, and field-focus interactions.
+- Control UI/theme: revise the asset pass after live feedback by pulling cobblestone off the main UI backgrounds, moving grass texture into the green inset bands around inputs/chat composer surfaces, and making non-orb Minecraft sounds much more audible.
+- Control UI/theme: replace the custom vector cursor with the supplied Minecraft pickaxe asset and add a short swing-state cursor pose on click so the pickaxe appears to move while interacting.
+- Control UI/theme: add a lightweight interactive voxel-world backdrop behind the chat UI for the OpenCraft theme, with mouse-reactive camera drift so chatting feels like sitting over a Minecraft-style panorama instead of a flat panel.
+- Control UI/theme: enlarge Minecraft chat typography with a subtle depth shadow, add Steve and mob-head identity panels around the chat composer, and introduce theme-aware head avatars plus a clickable user head picker for pig, sheep, skeleton, creeper, and enderman selections.
+- Control UI/theme: prototype a playable Minecraft Classic layer inside the chat backdrop with an opt-in tap-into-world flow and a return-to-chat exit so the background can be interactive without hijacking normal chatting.
 - Plugins/tests: reuse plugin loader alias and Jiti config resolution across repeated same-context loads, reducing import-heavy test overhead. (#69316) Thanks @amknight.
 - Cron: split runtime execution state into `jobs-state.json` so `jobs.json` stays stable for git-tracked job definitions. (#63105) Thanks @Feelw00.
 - Agents/compaction: send opt-in start and completion notices during context compaction. (#67830) Thanks @feniix.

@@ -15,6 +15,7 @@ import type {
   ToolCard,
 } from "../types/chat-types.ts";
 import { agentLogoUrl } from "../views/agents-utils.ts";
+import { resolveMinecraftHeadForRole } from "../minecraft-avatars.ts";
 import { renderCopyAsMarkdownButton } from "./copy-as-markdown.ts";
 import {
   extractTextCached,
@@ -648,6 +649,16 @@ function renderAvatar(
       class="chat-avatar ${className} chat-avatar--logo"
       src="${agentLogoUrl(basePath ?? "")}"
       alt="${assistantName}"
+    />`;
+  }
+
+  const minecraftHead = resolveMinecraftHeadForRole(normalized, assistantName);
+  if (minecraftHead) {
+    return html`<img
+      class="chat-avatar ${className} chat-avatar--minecraft-head"
+      src="${minecraftHead.src}"
+      alt="${minecraftHead.label}"
+      title="${minecraftHead.label}"
     />`;
   }
 

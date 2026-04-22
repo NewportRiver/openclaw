@@ -77,6 +77,7 @@ import type {
 import type { GatewayBrowserClient, GatewayHelloOk } from "./gateway.ts";
 import type { Tab } from "./navigation.ts";
 import type { SidebarContent } from "./sidebar-content.ts";
+import { MinecraftSoundboard, isMinecraftResolvedTheme } from "./soundboard.ts";
 import { loadSettings, type UiSettings } from "./storage.ts";
 import { VALID_THEME_NAMES, type ResolvedTheme, type ThemeMode, type ThemeName } from "./theme.ts";
 import type {
@@ -521,6 +522,8 @@ export class OpenClawApp extends LitElement {
   private popStateHandler = () =>
     onPopStateInternal(this as unknown as Parameters<typeof onPopStateInternal>[0]);
   private topbarObserver: ResizeObserver | null = null;
+  private soundboard = new MinecraftSoundboard();
+  private cursorSwingTimer: number | null = null;
   private globalKeydownHandler = (e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key === "k") {
       e.preventDefault();
@@ -530,6 +533,39 @@ export class OpenClawApp extends LitElement {
         this.paletteActiveIndex = 0;
       }
     }
+  };
+  private uiClickSoundHandler = (event: Event) => {
+    this.soundboard.handleClick(event);
+  };
+  private uiChangeSoundHandler = (event: Event) => {
+    this.soundboard.handleChange(event);
+  };
+  private uiFocusSoundHandler = (event: Event) => {
+    this.soundboard.handleFocus(event);
+  };
+  private uiPointerSwingHandler = (event: Event) => {
+    if (!isMinecraftResolvedTheme(this.themeResolved)) {
+      return;
+    }
+    const target = event.target;
+    if (!(target instanceof Element)) {
+      return;
+    }
+    if (
+      !target.closest(
+        "button, a, [role='button'], .btn, .nav-item, .settings-theme-card, .qs-segmented__btn, .agent-chat__suggestion",
+      )
+    ) {
+      return;
+    }
+    document.documentElement.classList.add("mc-cursor-swing");
+    if (this.cursorSwingTimer != null) {
+      window.clearTimeout(this.cursorSwingTimer);
+    }
+    this.cursorSwingTimer = window.setTimeout(() => {
+      document.documentElement.classList.remove("mc-cursor-swing");
+      this.cursorSwingTimer = null;
+    }, 170);
   };
 
   createRenderRoot() {
@@ -555,7 +591,12 @@ export class OpenClawApp extends LitElement {
         }
       }
     };
+    this.soundboard.setTheme(this.themeResolved);
     document.addEventListener("keydown", this.globalKeydownHandler);
+    document.addEventListener("click", this.uiClickSoundHandler);
+    document.addEventListener("change", this.uiChangeSoundHandler);
+    document.addEventListener("focusin", this.uiFocusSoundHandler);
+    document.addEventListener("mousedown", this.uiPointerSwingHandler);
     handleConnected(this as unknown as Parameters<typeof handleConnected>[0]);
   }
 
@@ -565,12 +606,35 @@ export class OpenClawApp extends LitElement {
 
   disconnectedCallback() {
     document.removeEventListener("keydown", this.globalKeydownHandler);
+    document.removeEventListener("click", this.uiClickSoundHandler);
+    document.removeEventListener("change", this.uiChangeSoundHandler);
+    document.removeEventListener("focusin", this.uiFocusSoundHandler);
+    document.removeEventListener("mousedown", this.uiPointerSwingHandler);
+    if (this.cursorSwingTimer != null) {
+      window.clearTimeout(this.cursorSwingTimer);
+      this.cursorSwingTimer = null;
+    }
+    document.documentElement.classList.remove("mc-cursor-swing");
     handleDisconnected(this as unknown as Parameters<typeof handleDisconnected>[0]);
     super.disconnectedCallback();
   }
 
   protected updated(changed: Map<PropertyKey, unknown>) {
     handleUpdated(this as unknown as Parameters<typeof handleUpdated>[0], changed);
+    if (changed.has("themeResolved")) {
+      const previousThemeResolved = changed.get("themeResolved") as ResolvedTheme | undefined;
+      this.soundboard.setTheme(this.themeResolved);
+      if (
+        previousThemeResolved &&
+        previousThemeResolved !== this.themeResolved &&
+        isMinecraftResolvedTheme(this.themeResolved)
+      ) {
+        this.soundboard.play("theme");
+      }
+    }
+    if (changed.has("connected") && this.connected && changed.get("connected") === false) {
+      this.soundboard.play("success");
+    }
     if (!changed.has("sessionKey") || this.agentsPanel !== "tools") {
       return;
     }

@@ -203,6 +203,19 @@ img.chat-avatar {
   object-position: center;
 }
 
+:root[data-theme="minecraft"] img.chat-avatar,
+:root[data-theme="minecraft-light"] img.chat-avatar {
+  image-rendering: pixelated;
+}
+
+:root[data-theme="minecraft"] .chat-avatar--minecraft-head,
+:root[data-theme="minecraft-light"] .chat-avatar--minecraft-head {
+  width: 40px;
+  height: 40px;
+  border: 2px solid color-mix(in srgb, var(--border-strong) 84%, black 16%);
+  background: rgba(24, 20, 14, 0.4);
+}
+
 /* Minimal Bubble Design - dynamic width based on content */
 .chat-bubble {
   position: relative;
@@ -223,11 +236,20 @@ img.chat-avatar {
 
 :root[data-theme="minecraft"] .chat-bubble,
 :root[data-theme="minecraft-light"] .chat-bubble {
-  border-radius: 6px;
+  border-radius: 4px;
   border-width: 2px;
+  font-size: 1rem;
+  line-height: 1.58;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.36);
   box-shadow:
-    inset 0 1px 0 var(--card-highlight),
-    0 2px 0 rgba(0, 0, 0, 0.14);
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 3px 0 var(--mc-drop);
+}
+
+:root[data-theme="minecraft"] .chat-bubble :is(p, li, blockquote, span, strong, em, code),
+:root[data-theme="minecraft-light"] .chat-bubble :is(p, li, blockquote, span, strong, em, code) {
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.36);
 }
 
 .chat-bubble.has-copy {
@@ -261,6 +283,21 @@ img.chat-avatar {
 .chat-expand-btn {
   background: var(--bg);
   color: var(--muted);
+}
+
+:root[data-theme="minecraft"] .chat-copy-btn,
+:root[data-theme="minecraft-light"] .chat-copy-btn,
+:root[data-theme="minecraft"] .chat-expand-btn,
+:root[data-theme="minecraft-light"] .chat-expand-btn {
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(118, 200, 79, 0.18) 0 38%, rgba(64, 47, 33, 0.94) 38% 100%),
+    url("/mc-dirt-grass.jpg") center / 128px 128px repeat;
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 2px 0 var(--mc-drop);
 }
 
 .chat-copy-btn__icon {
@@ -337,18 +374,24 @@ img.chat-avatar {
 
 :root[data-theme="minecraft"] .chat-group.assistant .chat-bubble,
 :root[data-theme="minecraft-light"] .chat-group.assistant .chat-bubble {
-  background: linear-gradient(180deg, #76c84f 0 6px, #3d3025 6px 100%);
+  background:
+    linear-gradient(180deg, rgba(118, 200, 79, 0.92) 0 7px, rgba(101, 74, 53, 0.14) 7px 15px, rgba(61, 48, 37, 0.74) 15px 100%),
+    url("/mc-dirt.jpg") center / 160px 160px repeat;
 }
 
 :root[data-theme="minecraft"] .chat-group.user .chat-bubble,
 :root[data-theme="minecraft-light"] .chat-group.user .chat-bubble {
-  background: color-mix(in srgb, var(--accent) 12%, var(--card));
-  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  background:
+    linear-gradient(180deg, rgba(144, 217, 97, 0.86) 0 10px, rgba(95, 159, 60, 0.2) 10px 100%),
+    url("/mc-grass.jpg") center / 128px 128px repeat;
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
 }
 
 :root[data-theme="minecraft"] .chat-group.user .chat-bubble:hover,
 :root[data-theme="minecraft-light"] .chat-group.user .chat-bubble:hover {
-  background: color-mix(in srgb, var(--accent) 18%, var(--card));
+  background:
+    linear-gradient(180deg, rgba(144, 217, 97, 0.94) 0 10px, rgba(95, 159, 60, 0.28) 10px 100%),
+    url("/mc-grass.jpg") center / 128px 128px repeat;
 }
 
 /* User bubbles have different styling */
@@ -364,6 +407,14 @@ img.chat-avatar {
 
 .chat-group.user .chat-bubble:hover {
   background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+:root[data-theme="minecraft"] .chat-sender-name,
+:root[data-theme="minecraft-light"] .chat-sender-name,
+:root[data-theme="minecraft"] .chat-group-timestamp,
+:root[data-theme="minecraft-light"] .chat-group-timestamp {
+  font-size: 0.77rem;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
 }
 
 /* Streaming animation */

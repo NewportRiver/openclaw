@@ -106,6 +106,18 @@
   box-shadow: none;
 }
 
+:root[data-theme="minecraft"] .topbar,
+:root[data-theme="minecraft-light"] .topbar {
+  border-bottom: 2px solid color-mix(in srgb, var(--border-strong) 86%, transparent);
+  background: linear-gradient(180deg, rgba(118, 200, 79, 0.14) 0 8px, rgba(47, 35, 25, 0.94) 8px 100%);
+  box-shadow:
+    inset 0 1px 0 var(--mc-edge-hi),
+    inset 0 -2px 0 var(--mc-edge-lo),
+    0 10px 20px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+}
+
 .topbar-nav-toggle {
   display: none;
 }
@@ -397,11 +409,72 @@
 :root[data-theme="minecraft-light"] .sidebar-brand__logo {
   border-radius: 4px;
   border: 2px solid var(--border-strong);
-  background: linear-gradient(180deg, #76c84f 0 6px, #5a4130 6px 100%);
+  object-fit: cover;
+  image-rendering: pixelated;
+  background: #6c4b33;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 4px 0 rgba(0, 0, 0, 0.16),
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 4px 0 var(--mc-drop),
     0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="minecraft"] .sidebar-shell,
+:root[data-theme="minecraft-light"] .sidebar-shell {
+  background:
+    linear-gradient(180deg, rgba(118, 200, 79, 0.92) 0 10px, rgba(80, 58, 40, 0.94) 10px 100%),
+    url("/mc-dirt-grass.jpg") center / 192px 192px repeat;
+  border-right: 2px solid color-mix(in srgb, var(--border-strong) 84%, transparent);
+  box-shadow:
+    inset -1px 0 0 var(--mc-edge-hi),
+    inset -2px 0 0 var(--mc-edge-lo);
+}
+
+:root[data-theme="minecraft"] .nav-collapse-toggle,
+:root[data-theme="minecraft-light"] .nav-collapse-toggle,
+:root[data-theme="minecraft"] .nav-section__label,
+:root[data-theme="minecraft-light"] .nav-section__label,
+:root[data-theme="minecraft"] .nav-item,
+:root[data-theme="minecraft-light"] .nav-item {
+  border-radius: 4px;
+  border-width: 2px;
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 3px 0 var(--mc-drop);
+}
+
+:root[data-theme="minecraft"] .nav-section__label,
+:root[data-theme="minecraft-light"] .nav-section__label {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 90%, white 10%) 0 40%, var(--panel) 40% 100%);
+}
+
+:root[data-theme="minecraft"] .nav-item,
+:root[data-theme="minecraft-light"] .nav-item {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 88%, white 12%) 0 18%, color-mix(in srgb, var(--panel) 96%, var(--bg)) 18% 100%);
+}
+
+:root[data-theme="minecraft"] .nav-item:hover,
+:root[data-theme="minecraft-light"] .nav-item:hover,
+:root[data-theme="minecraft"] .nav-collapse-toggle:hover,
+:root[data-theme="minecraft-light"] .nav-collapse-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 4px 0 var(--mc-drop),
+    0 10px 18px rgba(0, 0, 0, 0.16);
+}
+
+:root[data-theme="minecraft"] .nav-item.active,
+:root[data-theme="minecraft-light"] .nav-item.active,
+:root[data-theme="minecraft"] .nav-item--active,
+:root[data-theme="minecraft-light"] .nav-item--active {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-hover) 24%, var(--panel-strong)) 0 18%, color-mix(in srgb, var(--accent-subtle) 72%, var(--panel)) 18% 100%);
+  box-shadow:
+    inset 1px 1px 0 color-mix(in srgb, white 18%, transparent),
+    inset -1px -2px 0 color-mix(in srgb, var(--accent) 36%, black 64%),
+    0 4px 0 var(--mc-drop);
 }
 
 .sidebar-brand__copy {
@@ -934,6 +1007,11 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+:root[data-theme="minecraft"] .content,
+:root[data-theme="minecraft-light"] .content {
+  background: linear-gradient(180deg, rgba(18, 14, 11, 0.24), rgba(18, 14, 11, 0.08));
 }
 
 .content > * + * {

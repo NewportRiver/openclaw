@@ -10,6 +10,7 @@ import { getSafeLocalStorage } from "../local-storage.ts";
 import { refreshChatAvatar } from "./app-chat.ts";
 import { DEFAULT_CRON_FORM } from "./app-defaults.ts";
 import { renderUsageTab } from "./app-render-usage-tab.ts";
+import { isMinecraftResolvedTheme } from "./soundboard.ts";
 import {
   renderChatControls,
   renderChatMobileToggle,
@@ -2225,6 +2226,7 @@ export function renderApp(state: AppViewState) {
               error: state.lastError,
               sessions: state.sessionsResult,
               focusMode: chatFocus,
+              showMinecraftBackdrop: isMinecraftResolvedTheme(state.themeResolved),
               autoExpandToolCalls: false,
               onRefresh: () => {
                 state.chatSideResult = null;

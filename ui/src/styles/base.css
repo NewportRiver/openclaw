@@ -486,6 +486,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root[data-theme="minecraft"] body,
+:root[data-theme="minecraft-light"] body {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 94%, #1a120d) 0%, color-mix(in srgb, var(--bg) 88%, #241910) 100%);
+}
+
 @media (min-width: 1600px) {
   body {
     font-size: 15px;
@@ -727,6 +732,11 @@ select {
 }
 
 :root[data-theme="minecraft"] {
+  --mc-edge-hi: rgba(255, 245, 220, 0.2);
+  --mc-edge-mid: rgba(255, 245, 220, 0.08);
+  --mc-edge-lo: rgba(17, 11, 7, 0.72);
+  --mc-drop: rgba(0, 0, 0, 0.32);
+  --mc-press: rgba(0, 0, 0, 0.22);
   --ring: #76c84f;
   --accent: #76c84f;
   --accent-hover: #90d961;
@@ -795,6 +805,11 @@ select {
 }
 
 :root[data-theme="minecraft-light"] {
+  --mc-edge-hi: rgba(255, 255, 255, 0.52);
+  --mc-edge-mid: rgba(255, 255, 255, 0.18);
+  --mc-edge-lo: rgba(87, 66, 37, 0.3);
+  --mc-drop: rgba(87, 66, 37, 0.22);
+  --mc-press: rgba(87, 66, 37, 0.14);
   --ring: #5f9f3c;
   --accent: #5f9f3c;
   --accent-hover: #4f8832;
@@ -879,5 +894,24 @@ select {
 :root[data-theme="minecraft-light"] .settings-theme-card,
 :root[data-theme="minecraft-light"] .qs-segmented__btn,
 :root[data-theme="minecraft-light"] .agent-chat__suggestion {
-  cursor: url("/pickaxe-cursor.svg") 3 3, pointer;
+  cursor: url("/pickaxe-cursor.png") 4 4, pointer;
+}
+
+:root[data-theme="minecraft"].mc-cursor-swing button,
+:root[data-theme="minecraft"].mc-cursor-swing a,
+:root[data-theme="minecraft"].mc-cursor-swing [role="button"],
+:root[data-theme="minecraft"].mc-cursor-swing .btn,
+:root[data-theme="minecraft"].mc-cursor-swing .nav-item,
+:root[data-theme="minecraft"].mc-cursor-swing .settings-theme-card,
+:root[data-theme="minecraft"].mc-cursor-swing .qs-segmented__btn,
+:root[data-theme="minecraft"].mc-cursor-swing .agent-chat__suggestion,
+:root[data-theme="minecraft-light"].mc-cursor-swing button,
+:root[data-theme="minecraft-light"].mc-cursor-swing a,
+:root[data-theme="minecraft-light"].mc-cursor-swing [role="button"],
+:root[data-theme="minecraft-light"].mc-cursor-swing .btn,
+:root[data-theme="minecraft-light"].mc-cursor-swing .nav-item,
+:root[data-theme="minecraft-light"].mc-cursor-swing .settings-theme-card,
+:root[data-theme="minecraft-light"].mc-cursor-swing .qs-segmented__btn,
+:root[data-theme="minecraft-light"].mc-cursor-swing .agent-chat__suggestion {
+  cursor: url("/pickaxe-cursor-active.png") 8 6, pointer;
 }

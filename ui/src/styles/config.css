@@ -516,16 +516,41 @@
     transform var(--duration-fast) ease;
 }
 
+:root[data-theme="minecraft"] .settings-theme-card,
+:root[data-theme="minecraft-light"] .settings-theme-card {
+  border-width: 2px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 92%, white 8%) 0 16px, var(--bg) 16px 100%);
+  box-shadow:
+    inset 1px 1px 0 var(--mc-edge-hi),
+    inset -1px -2px 0 var(--mc-edge-lo),
+    0 4px 0 var(--mc-drop);
+}
+
 .settings-theme-card:hover {
   border-color: var(--border-strong);
   background: var(--bg-hover);
   transform: translateY(-1px);
 }
 
+:root[data-theme="minecraft"] .settings-theme-card:hover,
+:root[data-theme="minecraft-light"] .settings-theme-card:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-hover) 92%, white 8%) 0 16px, var(--bg-hover) 16px 100%);
+}
+
 .settings-theme-card--active {
   border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   background: color-mix(in srgb, var(--accent) 10%, var(--bg-elevated));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+:root[data-theme="minecraft"] .settings-theme-card--active,
+:root[data-theme="minecraft-light"] .settings-theme-card--active {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-hover) 16%, var(--panel-strong)) 0 16px, color-mix(in srgb, var(--accent-subtle) 72%, var(--bg-elevated)) 16px 100%);
+  box-shadow:
+    inset 1px 1px 0 color-mix(in srgb, white 18%, transparent),
+    inset -1px -2px 0 color-mix(in srgb, var(--accent) 34%, black 66%),
+    0 4px 0 var(--mc-drop);
 }
 
 .settings-theme-card__icon,
